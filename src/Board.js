@@ -79,12 +79,26 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+        var pieceCount = 0;
+        var row = this.attributes[rowIndex];
+        //console.log(rowIndex);
+        for (var i = 0; i < row.length; i++) {
+          pieceCount+= row[i];
+          if(pieceCount > 1){
+            return true;
+          }
+        }
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      for (var key in this.attributes) {
+        if(this.hasRowConflictAt(key) === true){
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -94,12 +108,27 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var pieceCount = 0;
+      for(var keys in this.attributes){
+        if(keys != 'n'){
+          var row=this.attributes[keys];
+          pieceCount+=row[colIndex];
+          if(pieceCount > 1){
+            return true;
+          }
+        }
+      }
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      for (var key in this.attributes) {
+        if(this.hasColConflictAt(key) === true){
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -109,12 +138,31 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      console.log(majorDiagonalColumnIndexAtFirstRow)
+      var col = 0;
+      var pieceCount = 0;
+      for(var i = majorDiagonalColumnIndexAtFirstRow; i >= 0; i--){
+
+        pieceCount += this.attributes[i][col]
+        col++
+      }
+      if(pieceCount > 1){
+        return true;
+      }
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      for (var key in this.attributes) {
+        if(key != 'n'){
+          if(this.hasMajorDiagonalConflictAt(key) === true){
+            return true; 
+          }
+        }
+      }
+
+      return false;
     },
 
 
