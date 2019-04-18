@@ -167,7 +167,7 @@
       for (var diagCount = 0; diagCount <= numDiags; diagCount++) {
         pieceCount = 0;
         if (diagCount <= boardSize) {
-          for (var rowStart = boardSize - 1; rowStart >= 0; rowStart --) {
+          for (var rowStart = boardSize - 1; rowStart >= 0; rowStart --) {//fix row start var due to diagCount relation
             var original = rowStart;
             for (var colStart = 0; colStart <= boardSize - 1 - rowStart; colStart ++) {
               pieceCount += this.attributes[rowStart][colStart];
