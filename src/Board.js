@@ -132,12 +132,61 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(boardArray) {
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      console.log(majorDiagonalColumnIndexAtFirstRow);
       return false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var storeArray = [];
+      var rowStore = [];//becomes an array of arrays
+      pieceCount = 0;
+      
+      for (var keys in this.attributes) {
+        if (keys !== 'n') {
+          rowStore.push(this.attributes[keys]);
+        }
+      }
+
+      for(var i = 0; i < rowStore.length - 1; i ++){//loops through rows
+        for(var j = 0; j < rowStore[i].length - 1; j ++){
+          if (rowStore[i][j] === 1) {
+            var tuple = [i, j];
+            // console.log(rowStore[i][j], i, j);
+            storeArray.push([i, j]);
+            // console.log(tuple, storeArray, rowStore.length);
+          }
+        }
+      }
+
+      var storageArray = [];
+      for(var t = 0; t < storeArray.length-1; t ++){
+        storageArray.push(storeArray[t])
+      }
+      console.log('copy', storageArray, 'original', storeArray)
+      // console.log('storeArray', storeArray);
+      for(var k = 0; k < storeArray.length - 1; k ++){
+        var tupleToCheck = storageArray[k];
+        // console.log(tupleToCheck);
+        for(var j = 0; j < rowStore.length - 1; j ++){
+          var row = tupleToCheck[0]++;
+          var col = tupleToCheck[1]++;
+          // console.log('current', tupleToCheck, row, col);
+          for (var m = 0; m < storeArray.length - 1; m ++){
+            // console.log(storeArray[m], tupleToCheck)
+            if (storageArray[m] === tupleToCheck) {
+              pieceCount++;
+              // console.log(pieceCount);
+            }
+          }
+        }
+        tupleToCheck = [];
+      }
+
+      if(pieceCount > 0){
+        return true;
+      }
       return false;
     },
 
@@ -151,47 +200,43 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var pieceCount = 0;
-      var boardArray = [];
-      var boardSize = this.attributes.n;
-      var numDiags = boardSize * 2 - 1;
-      //combine board arrays
-      for (var items in this.attributes) {
-        if (items !== 'n') {
-          boardArray.push(this.attributes[items]);
-        }
-      }
+      // var storeArray = [];
+      // var rowStore = [];
+      // pieceCount = 0;
+      // for (var keys in this.attributes) {
+      //   if (keys !== 'n') {
+      //     rowStore.push(this.attributes[keys]);
+      //   }
+      // }
+      
+      // for(var i = 0; i < rowStore.length; i++){//loops through rows
+      //   for(var j = 0; j < rowStore[i].length; j++){
+      //     if (rowStore[i][j] === 1) {
+      //       storeArray.push([i, j]);
+      //     }
+      //   }
+      // }
+      
+      // for(var k = 0; k < storeArray.length; k ++){
+      //   var tupleToCheck = storeArray[k];
+      //   for(var j = 0; j < rowStore.length - 1; j++){
+      //     tupleToCheck[0]++;
+      //     tupleToCheck[1]++;
+      //     console.log(tupleToCheck);
+      //     for (var it of storeArray){
+      //       console.log('hi');
+      //       if (tupleToCheck == storeArray[it]) {
+      //         console.log('hi')
+      //         pieceCount ++;
+      //       }
+      //     }
+      //   }
+      //   tupleToCheck = [];
+      // }
 
-      var storeDiagResults = [];
-
-      for (var diagCount = 0; diagCount <= numDiags; diagCount++) {
-        pieceCount = 0;
-        if (diagCount <= boardSize) {
-          for (var rowStart = boardSize - 1; rowStart >= 0; rowStart --) {//fix row start var due to diagCount relation
-            var original = rowStart;
-            for (var colStart = 0; colStart <= boardSize - 1 - rowStart; colStart ++) {
-              pieceCount += this.attributes[rowStart][colStart];
-              rowStart ++;
-            }
-            rowStart = original;
-            if (pieceCount > 1) {
-              storeDiagResults.push(true);
-            }
-            storeDiagResults.push(false);
-          }
-        } else {
-          var rowSet = 0;
-          for (var colSet = 1; colSet <= boardSize - 1; colSet ++) {
-            pieceCount += this.attributes[rowSet][colSet];
-            rowSet ++;
-          }
-        }
-      }
-      for (var results in storeDiagResults) {
-        if (storeDiagResults[results] === true) {
-          return true;
-        }
-      }
+      // if(pieceCount > 0){
+      //   return true;
+      // }
       return false;
     }
 
