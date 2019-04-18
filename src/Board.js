@@ -164,7 +164,7 @@
 
       var storeDiagResults = [];
 
-      for (var diagCount = 0; diagCount < numDiags; diagCount++) {
+      for (var diagCount = 0; diagCount <= numDiags; diagCount++) {
         pieceCount = 0;
         if (diagCount <= boardSize) {
           for (var rowStart = boardSize - 1; rowStart >= 0; rowStart --) {
@@ -181,19 +181,18 @@
           }
         } else {
           var rowSet = 0;
-          for (var colSet = diagCount; colSet <= boardSize - 1; colSet ++) {
+          for (var colSet = 1; colSet <= boardSize - 1; colSet ++) {
             pieceCount += this.attributes[rowSet][colSet];
             rowSet ++;
           }
         }
-
-        for (var results in storeDiagResults) {
-          if (storeDiagResults[results] === true) {
-            return true;
-          }
-        }
-        return false;
       }
+      for (var results in storeDiagResults) {
+        if (storeDiagResults[results] === true) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
