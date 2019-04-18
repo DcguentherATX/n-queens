@@ -100,8 +100,6 @@
       return false;
     },
 
-
-
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
@@ -130,45 +128,18 @@
       return false;
     },
 
-
-
-    // Major Diagonals - go from top-left to bottom-right
+    // Major Diagonals - go from bottom-left to top-right
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(boardArray) {
-      var pieceCount = 0;
-      for (var i = boardArray.length - 1; i >= 0; i--) {
-        var arrayLStorage = 0;
-        for (var t = 0; t < boardArray.length; t++) {
-          if (this.attributes[arrayLStorage][t] != undefined) {
-            pieceCount += this.attributes[arrayLStorage][t];
-          }
-          arrayLStorage++;
-        }
-      }
-      if (pieceCount > 1) {
-        return true;
-      }
       return false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      newArray = [];
-      for (var key in this.attributes) {
-        if (key !== 'n') {
-          newArray.push(this.attributes[key]);
-        }
-      }
-      if (this.hasMajorDiagonalConflictAt(newArray) == true) {
-        return true;
-      } else {
-        return false;
-      }
+      return false;
     },
-
-
 
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
@@ -180,7 +151,49 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var pieceCount = 0;
+      var boardArray = [];
+      var boardSize = this.attributes.n;
+      var numDiags = boardSize * 2 - 1;
+      //combine board arrays
+      for (var items in this.attributes) {
+        if (items !== 'n') {
+          boardArray.push(this.attributes[items]);
+        }
+      }
+
+      var storeDiagResults = [];
+
+      for (var diagCount = 0; diagCount < numDiags; diagCount++) {
+        pieceCount = 0;
+        if (diagCount <= boardSize) {
+          for (var rowStart = boardSize - 1; rowStart >= 0; rowStart --) {
+            var original = rowStart;
+            for (var colStart = 0; colStart <= boardSize - 1 - rowStart; colStart ++) {
+              pieceCount += this.attributes[rowStart][colStart];
+              rowStart ++;
+            }
+            rowStart = original;
+            if (pieceCount > 1) {
+              storeDiagResults.push(true);
+            }
+            storeDiagResults.push(false);
+          }
+        } else {
+          var rowSet = 0;
+          for (var colSet = diagCount; colSet <= boardSize - 1; colSet ++) {
+            pieceCount += this.attributes[rowSet][colSet];
+            rowSet ++;
+          }
+        }
+
+        for (var results in storeDiagResults) {
+          if (storeDiagResults[results] === true) {
+            return true;
+          }
+        }
+        return false;
+      }
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
